@@ -2,20 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/styles/app_colors.dart';
 import 'package:weather_app/styles/app_icons.dart';
 
-class TomorrowWeatherInfo extends StatelessWidget {
+import '../../controller/main_controller.dart';
+
+class TomorrowWeatherInfo extends StatefulWidget {
   const TomorrowWeatherInfo({super.key});
 
   @override
+  State<TomorrowWeatherInfo> createState() => _TomorrowWeatherInfoState();
+}
+
+class _TomorrowWeatherInfoState extends State<TomorrowWeatherInfo> {
+  late final MainController mainController;
+
+  _TomorrowWeatherInfoState() {
+    mainController = MainController(setState)..getApi();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(
+    return Padding(
+      padding: const EdgeInsets.only(
         top: 25,
         bottom: 20,
       ),
       child: Card(
         color: AppColors.white80,
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 21,
             vertical: 14,
           ),
@@ -24,7 +37,7 @@ class TomorrowWeatherInfo extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                   Text(
                     "Tomorrow",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -36,15 +49,18 @@ class TomorrowWeatherInfo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "22°",
-                        style: TextStyle(
+                        "${mainController.tomorrowCelsius}°",
+                        style: const TextStyle(
                             color: AppColors.scheduledNext7Days,
                             fontSize: 15,
                             fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Image(
-                        image: AssetImage(AppIcons.cloudySunIcon),
+                        image: AssetImage(
+                          mainController.tomorrowWeatherIcon ??
+                              AppIcons.cloudyRainSunIcon,
+                        ),
                         height: 80,
                         width: 80,
                       )
@@ -53,21 +69,21 @@ class TomorrowWeatherInfo extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 13),
+                padding: const EdgeInsets.symmetric(horizontal: 13),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     WeatherInfo(
-                      text: "1 cm",
+                      text: "${mainController.tomorrowRainFall} cm",
                       weatherInfo: AppIcons.umbrellaIcon,
                     ),
                     WeatherInfo(
-                      text: "15km/h",
+                      text: "${mainController.tomorrowWindSpeed}km/h",
                       weatherInfo: AppIcons.windIcon,
                     ),
                     Column(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(
                             bottom: 24.0,
                             top: 13,
@@ -97,10 +113,10 @@ class TomorrowWeatherInfo extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 10.0),
+                          padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            "50 %",
-                            style: TextStyle(
+                            "${mainController.tomorrowHumidity} %",
+                            style: const TextStyle(
                               color: AppColors.scheduledNext7Days,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,

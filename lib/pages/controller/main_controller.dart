@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart';
 import 'package:weather_app/constants/api_constants.dart';
+import 'package:weather_app/model/day.dart';
 import 'package:weather_app/model/weather_model.dart';
 import 'package:weather_app/styles/app_icons.dart';
 
@@ -15,6 +17,15 @@ class MainController {
   List<String>? currentDayTime;
   List<String>? currentWeatherIcon;
   List<double>? currentTimeCelsius;
+
+  String? tomorrowCelsius;
+  String? tomorrowWeatherIcon;
+  String? tomorrowWindSpeed;
+  String? tomorrowRainFall;
+  String? tomorrowHumidity;
+  List<int>? tomorrowWeeks;
+  List<double>? tomorrowCelsiusOfWeeks;
+  List<String>? tomorrowIconOfWeeks;
 
   void Function(void Function()) update;
 
@@ -51,8 +62,41 @@ class MainController {
     currentTimeCelsius =
         weatherModel.days[0].hours?.map((e) => e.temp).cast<double>().toList();
 
+    tomorrowCelsius = fahrenheitToCelsius(weatherModel.days[1].temp ?? 0);
+    tomorrowWeatherIcon = weatherInIcon(weatherModel.days[1].icon ?? "");
+    tomorrowWindSpeed = weatherModel.days[1].windspeed?.round().toString();
+    tomorrowRainFall = rainFall(weatherModel.days[1].precip ?? 0);
+    tomorrowHumidity = weatherModel.days[1].humidity?.toStringAsFixed(0);
+    tomorrowWeeks =
+        weatherModel.days.map((e) => e.datetimeEpoch).cast<int>().toList();
+    tomorrowCelsiusOfWeeks = weatherModel.days.map((e) => e.temp).cast<double>().toList();
+    tomorrowIconOfWeeks = weatherModel.days.map((e) => e.icon).cast<String>().toList();
+
     update(() {});
   }
+}
+
+String weekDays(int dateTimeEpoch) {
+  String res = "";
+  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(dateTimeEpoch * 1000);
+  int week = dateTime.weekday;
+  switch (week) {
+    case 1:
+      res = "Monday";
+    case 2:
+      res = "Tuesday";
+    case 3:
+      res = "Wednesday";
+    case 4:
+      res = "Thursday";
+    case 5:
+      res = "Friday";
+    case 6:
+      res = "Saturday";
+    case 7:
+      res = "Sunday";
+  }
+  return res;
 }
 
 String fahrenheitToCelsius(double fahrenheit) {

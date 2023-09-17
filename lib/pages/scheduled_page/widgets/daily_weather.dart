@@ -2,68 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/styles/app_colors.dart';
 import 'package:weather_app/styles/app_icons.dart';
 
-class DailyWeather extends StatelessWidget {
+import '../../controller/main_controller.dart';
+
+class DailyWeather extends StatefulWidget {
   const DailyWeather({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemBuilder: (context, item) => const DetailedDayInfoView(),
-        itemCount: 20,
-      ),
-    );
-  }
+  State<DailyWeather> createState() => _DailyWeatherState();
 }
 
-class DetailedDayInfoView extends StatelessWidget {
-  const DetailedDayInfoView({super.key});
+class _DailyWeatherState extends State<DailyWeather> {
+  late final MainController mainController;
+
+  _DailyWeatherState() {
+    mainController = MainController(setState)..getApi();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Card(
-      color: AppColors.white58,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 20,
-          horizontal: 20,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Thursday",
-              style: TextStyle(
-                color: AppColors.scheduledNext7Days,
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
+    if (mainController.tomorrowWeeks != null) {
+      return Expanded(
+        child: ListView.builder(
+          itemCount: 7,
+          itemBuilder: (context, item) => Card(
+            color: AppColors.white58,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: 20,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    weekDays(mainController.tomorrowWeeks![item+2]),
+                    style: TextStyle(
+                      color: AppColors.scheduledNext7Days,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "${fahrenheitToCelsius(mainController.tomorrowCelsiusOfWeeks![item+2])}°",
+                        style: TextStyle(
+                          color: AppColors.scheduledNext7Days,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Image(
+                        image: AssetImage(
+                          weatherInIcon(mainController.tomorrowIconOfWeeks![item+2]),
+                        ),
+                        height: 45,
+                        width: 45,
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
-            Row(
-              children: [
-                Text(
-                  "21°",
-                  style: TextStyle(
-                    color: AppColors.scheduledNext7Days,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Image(
-                  image: AssetImage(
-                    AppIcons.sunIcon,
-                  ),
-                  height: 45,
-                  width: 45,
-                ),
-              ],
-            )
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return SizedBox(height: 100, width: double.infinity,);
+    }
+
   }
 }
