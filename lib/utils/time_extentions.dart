@@ -4,7 +4,6 @@ enum WeekDay {
   wednesday("Wednesday"),
   thursday("Thursday"),
   friday("Friday"),
-  weekend("Weekend"),
   saturday("Saturday"),
   sunday("Sunday");
 

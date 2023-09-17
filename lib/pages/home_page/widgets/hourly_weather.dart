@@ -2,8 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/styles/app_colors.dart';
 import 'package:weather_app/styles/app_icons.dart';
 
-class HourlyWeather extends StatelessWidget {
+
+import '../../controller/main_controller.dart';
+
+class HourlyWeather extends StatefulWidget {
   const HourlyWeather({super.key});
+
+  @override
+  State<HourlyWeather> createState() => _HourlyWeatherState();
+}
+
+class _HourlyWeatherState extends State<HourlyWeather> {
+  late final MainController mainController;
+
+  _HourlyWeatherState() {
+    mainController = MainController(setState)..getApi();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,50 +62,103 @@ class HourlyWeather extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemBuilder: ( context,  index) =>
-                   const SizedBox(width: 13),
-              itemCount: 15,
-              separatorBuilder: ( context,  index) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 15),
-                  child: SizedBox(
-                    height: 55,
-                    width: 48,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: AppColors.white30,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "13:00",
-                            style: TextStyle(fontSize: 11),
-                          ),
-                          Image(
-                            image: AssetImage(
-                              AppIcons.cloudyIcon,
-                            ),
-                            height: 30,
-                            width: 30,
-                          ),
-                          Text(
-                            "19°",
-                            style: TextStyle(
-                                fontSize: 11, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+              itemBuilder: (context, index) => const SizedBox(width: 10),
+              itemCount: mainController.currentDayTime?.length ?? 0,
+              separatorBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: SizedBox(
+                  height: 55,
+                  width: 48,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: AppColors.white30,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
                       ),
                     ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          mainController.currentDayTime![index],
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                        Image(
+                          image: AssetImage(
+                            weatherInIcon(mainController.currentWeatherIcon![index]),
+                          ),
+                          height: 30,
+                          width: 30,
+                        ),
+                        Text(
+                          "${fahrenheitToCelsius(mainController.currentTimeCelsius![index])}°",
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                );
-              },
+                ),
+              ),
+
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+
+
+class MainDayInfo extends StatelessWidget {
+  final String hour;
+
+  const MainDayInfo({
+    super.key,
+    required this.hour,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: SizedBox(
+        height: 55,
+        width: 48,
+        child: DecoratedBox(
+          decoration: const BoxDecoration(
+            color: AppColors.white30,
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                hour,
+                style: const TextStyle(fontSize: 11),
+              ),
+              const Image(
+                image: AssetImage(
+                  AppIcons.cloudyIcon,
+                ),
+                height: 30,
+                width: 30,
+              ),
+              const Text(
+                "19°",
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

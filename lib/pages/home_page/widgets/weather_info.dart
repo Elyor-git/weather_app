@@ -1,32 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/pages/controller/main_controller.dart';
 import 'package:weather_app/utils/list_extention.dart';
 
 import '../../../styles/app_colors.dart';
 import '../../../styles/app_icons.dart';
 
-class WeatherInfo extends StatelessWidget {
+class WeatherInfo extends StatefulWidget {
   const WeatherInfo({super.key});
 
+  @override
+  State<WeatherInfo> createState() => _WeatherInfoState();
+}
+
+class _WeatherInfoState extends State<WeatherInfo> {
+  late final MainController mainController;
+
+  _WeatherInfoState() {
+    mainController = MainController(setState)..getApi();
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
-        children: const <Widget>[
+        children:  <Widget>[
           DetailItem(
             icon: AppIcons.umbrellaIcon,
             info: "RainFall",
-            action: "3cm",
+            action: "${mainController.rainInfo ?? 0}cm",
           ),
-          DetailItem(
+           DetailItem(
             icon: AppIcons.windIcon,
             info: "Wind",
-            action: "19km/h",
+            action: "${mainController.windSpeed ?? 0}km/h",
           ),
-          DetailItem(
+           DetailItem(
             icon: AppIcons.humidityIcon,
             info: "Humidity",
-            action: "64%",
+            action: "${mainController.humidity ?? 0}%",
           ),
         ].addBetween(
           const SizedBox(height: 5),
