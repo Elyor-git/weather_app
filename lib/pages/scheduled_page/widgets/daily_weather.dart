@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/styles/app_colors.dart';
-import 'package:weather_app/styles/app_icons.dart';
 
 import '../../controller/main_controller.dart';
 
@@ -27,7 +26,7 @@ class _DailyWeatherState extends State<DailyWeather> {
           itemBuilder: (context, item) => Card(
             color: AppColors.white58,
             child: Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 vertical: 20,
                 horizontal: 20,
               ),
@@ -36,7 +35,7 @@ class _DailyWeatherState extends State<DailyWeather> {
                 children: [
                   Text(
                     weekDays(mainController.tomorrowWeeks![item+2]),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.scheduledNext7Days,
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
@@ -46,13 +45,13 @@ class _DailyWeatherState extends State<DailyWeather> {
                     children: [
                       Text(
                         "${fahrenheitToCelsius(mainController.tomorrowCelsiusOfWeeks![item+2])}°",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.scheduledNext7Days,
                           fontWeight: FontWeight.w600,
                           fontSize: 12,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Image(
@@ -71,7 +70,7 @@ class _DailyWeatherState extends State<DailyWeather> {
         ),
       );
     } else {
-      return SizedBox(height: 100, width: double.infinity,);
+      return const SizedBox(height: 100, width: double.infinity,);
     }
 
   }

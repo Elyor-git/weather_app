@@ -1,9 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
 import 'package:weather_app/constants/api_constants.dart';
-import 'package:weather_app/model/day.dart';
-import 'package:weather_app/model/weather_model.dart';
+import 'package:weather_app/constants/config.dart';
+import 'package:weather_app/model/geo_model/geo_model.dart';
+import 'package:weather_app/model/weather_model/weather_model.dart';
+import 'package:weather_app/service/api_service.dart';
 import 'package:weather_app/styles/app_icons.dart';
 
 class MainController {
@@ -26,51 +26,65 @@ class MainController {
   List<int>? tomorrowWeeks;
   List<double>? tomorrowCelsiusOfWeeks;
   List<String>? tomorrowIconOfWeeks;
+  late String geoLocationCityName;
 
   void Function(void Function()) update;
 
   MainController(this.update);
 
   Future<void> getApi() async {
-    Response? response;
+    Response? responseWeather;
+    Response? responseGeo;
+
     try {
-      final Uri uri = Uri.parse(ApiConstants.url);
-      response = await get(uri);
+      final ApiService service = ApiService();
+      responseGeo = await service.geoDio
+          .get("${AppConfig.geoBaseUrl}/ipgeo?apiKey=${AppConfig.geoApiKey}");
+
+      final ApiGeoLocation geoLocation =
+          ApiGeoLocation.fromJson(responseGeo.data);
+      geoLocationCityName = geoLocation.city ?? "";
+
+      responseGeo = responseWeather = await service.dio.get(
+        "${AppConfig.weatherBaseUrl}${ApiConstants.weatherPath(geoLocationCityName)}?unitGroup=us&key=${AppConfig.weatherApiKey}&contentType=json",
+      );
     } catch (e, stackTrace) {
       FormatException("$e, stackTrace:$stackTrace");
     }
 
     final WeatherModel weatherModel =
-        WeatherModel.fromJson(jsonDecode(response?.body ?? ""));
+        WeatherModel.fromJson(responseWeather?.data);
 
     addressOfCountryAndCity = weatherModel.resolvedAddress;
     currentCelsius =
         fahrenheitToCelsius(weatherModel.currentConditions?.temp ?? 0);
 
-    weatherInfoWord = weatherInfoInSingleWord(
+    weatherInfoWord = _weatherInfoInSingleWord(
         weatherModel.currentConditions?.icon ?? "Showery");
     weatherInfoIcon = weatherInIcon(weatherModel.currentConditions?.icon ?? "");
-    rainInfo = rainFall(weatherModel.currentConditions?.precip ?? 0);
+    rainInfo = _rainFall(weatherModel.currentConditions?.precip ?? 0);
     windSpeed = weatherModel.currentConditions?.windspeed?.round().toString();
     humidity = weatherModel.currentConditions?.humidity?.toStringAsFixed(0);
     currentDayTime = weatherModel.days[0].hours
-        ?.map((e) => e.datetime?.substring(0, 5))
+        .map((e) => e.datetime?.substring(0, 5))
         .cast<String>()
         .toList();
     currentWeatherIcon =
-        weatherModel.days[0].hours?.map((e) => e.icon).cast<String>().toList();
+        weatherModel.days[0].hours.map((e) => e.icon).cast<String>().toList();
     currentTimeCelsius =
-        weatherModel.days[0].hours?.map((e) => e.temp).cast<double>().toList();
+        weatherModel.days[0].hours.map((e) => e.temp).cast<double>().toList();
 
     tomorrowCelsius = fahrenheitToCelsius(weatherModel.days[1].temp ?? 0);
     tomorrowWeatherIcon = weatherInIcon(weatherModel.days[1].icon ?? "");
     tomorrowWindSpeed = weatherModel.days[1].windspeed?.round().toString();
-    tomorrowRainFall = rainFall(weatherModel.days[1].precip ?? 0);
+    tomorrowRainFall = _rainFall(weatherModel.days[1].precip ?? 0);
     tomorrowHumidity = weatherModel.days[1].humidity?.toStringAsFixed(0);
     tomorrowWeeks =
         weatherModel.days.map((e) => e.datetimeEpoch).cast<int>().toList();
-    tomorrowCelsiusOfWeeks = weatherModel.days.map((e) => e.temp).cast<double>().toList();
-    tomorrowIconOfWeeks = weatherModel.days.map((e) => e.icon).cast<String>().toList();
+    tomorrowCelsiusOfWeeks =
+        weatherModel.days.map((e) => e.temp).cast<double>().toList();
+    tomorrowIconOfWeeks =
+        weatherModel.days.map((e) => e.icon).cast<String>().toList();
 
     update(() {});
   }
@@ -104,7 +118,7 @@ String fahrenheitToCelsius(double fahrenheit) {
   return number.truncate().toString();
 }
 
-String weatherInfoInSingleWord(String info) {
+String _weatherInfoInSingleWord(String info) {
   String res = "Showery";
   switch (info) {
     case "clear-day" || "clear-night":
@@ -140,7 +154,7 @@ String weatherInIcon(String info) {
   return res;
 }
 
-String rainFall(double info) {
+String _rainFall(double info) {
   double res = info * 2.54;
   return res.toStringAsFixed(0);
 }

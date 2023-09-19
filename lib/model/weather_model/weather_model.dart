@@ -40,12 +40,12 @@ class WeatherModel {
       timezone: json["timezone"] != null ? json["timezone"] as String : null,
       tzoffset: json["tzoffset"] != null ? json["tzoffset"] as double : null,
       description:
-      json["description"] != null ? json["description"] as String : null,
+          json["description"] != null ? json["description"] as String : null,
       days: (json["days"] as List).map((e) => Day.fromJson(e)).toList(),
       alerts: json["alerts"] as List,
       currentConditions: json["currentConditions"] != null
           ? CurrentConditions.fromJson(
-          json["currentConditions"] as Map<String, Object?>)
+              json["currentConditions"] as Map<String, Object?>)
           : null,
     );
   }
@@ -67,19 +67,19 @@ class WeatherModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is WeatherModel &&
-              runtimeType == other.runtimeType &&
-              queryCost == other.queryCost &&
-              latitude == other.latitude &&
-              longitude == other.longitude &&
-              resolvedAddress == other.resolvedAddress &&
-              address == other.address &&
-              timezone == other.timezone &&
-              tzoffset == other.tzoffset &&
-              description == other.description &&
-              days == other.days &&
-              alerts == other.alerts &&
-              currentConditions == other.currentConditions;
+      other is WeatherModel &&
+          runtimeType == other.runtimeType &&
+          queryCost == other.queryCost &&
+          latitude == other.latitude &&
+          longitude == other.longitude &&
+          resolvedAddress == other.resolvedAddress &&
+          address == other.address &&
+          timezone == other.timezone &&
+          tzoffset == other.tzoffset &&
+          description == other.description &&
+          days == other.days &&
+          alerts == other.alerts &&
+          currentConditions == other.currentConditions;
 
   @override
   int get hashCode =>

@@ -37,7 +37,7 @@ class _TomorrowWeatherInfoState extends State<TomorrowWeatherInfo> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Text(
+                   const Text(
                     "Tomorrow",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,

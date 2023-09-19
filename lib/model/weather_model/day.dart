@@ -37,7 +37,7 @@ class Day {
   final String? icon;
   final List<String>? stations;
   final String? source;
-  final List<Hours>? hours;
+  final List<Hours> hours;
   Day({
     required this.datetime,
     required this.datetimeEpoch,
@@ -79,14 +79,6 @@ class Day {
   });
 
 
-
-  @override
-  String toString() {
-    return 'Day(datetime: $datetime, datetimeEpoch: $datetimeEpoch, tempmax: $tempmax, tempmin: $tempmin, temp: $temp, feelslikemax: $feelslikemax, feelslikemin: $feelslikemin, feelslike: $feelslike, dew: $dew, humidity: $humidity, precip: $precip, precipprob: $precipprob, precipcover: $precipcover, preciptype: $preciptype, snow: $snow, snowdepth: $snowdepth, windgust: $windgust, windspeed: $windspeed, winddir: $winddir, pressure: $pressure, cloudcover: $cloudcover, visibility: $visibility, solarradiation: $solarradiation, solarenergy: $solarenergy, uvindex: $uvindex, severerisk: $severerisk, sunrise: $sunrise, sunriseEpoch: $sunriseEpoch, sunset: $sunset, sunsetEpoch: $sunsetEpoch, moonphase: $moonphase, conditions: $conditions, description: $description, icon: $icon, stations: $stations, source: $source, hours: $hours)';
-  }
-
-
-
   factory Day.fromJson(Map<String, Object?> map) {
     return Day(
       datetime: map['datetime'] != null ? map['datetime'] as String : null,
@@ -125,8 +117,137 @@ class Day {
       icon: map['icon'] != null ? map['icon'] as String : null,
       stations: map['stations'] != null ? List.from((map['stations'] as List)) : null,
       source: map['source'] != null ? map['source'] as String : null,
-      hours: map['hours'] != null ? (map['hours']as List).map((e) => Hours.fromJson(e)).toList() : null,
+      hours: map['hours'] != null ? List<Map<String, Object?>>
+          .from(map['hours'] as List<Object?>)
+          .map(Hours.fromJson).toList() :
+          <Hours>[],
     );
+
+
   }
 
+  @override
+  String toString() {
+    return 'Day('
+        'datetime: $datetime, '
+        'datetimeEpoch: $datetimeEpoch, '
+        'tempmax: $tempmax, '
+        'tempmin: $tempmin, '
+        'temp: $temp, '
+        'feelslikemax: $feelslikemax, '
+        'feelslikemin: $feelslikemin, '
+        'feelslike: $feelslike, '
+        'dew: $dew, '
+        'humidity: $humidity, '
+        'precip: $precip, '
+        'precipprob: $precipprob, '
+        'precipcover: $precipcover, '
+        'preciptype: $preciptype, '
+        'snow: $snow, '
+        'snowdepth: $snowdepth, '
+        'windgust: $windgust, '
+        'windspeed: $windspeed, '
+        'winddir: $winddir, '
+        'pressure: $pressure, '
+        'cloudcover: $cloudcover, '
+        'visibility: $visibility, '
+        'solarradiation: $solarradiation, '
+        'solarenergy: $solarenergy, '
+        'uvindex: $uvindex, '
+        'severerisk: $severerisk, '
+        'sunrise: $sunrise, '
+        'sunriseEpoch: $sunriseEpoch, '
+        'sunset: $sunset, '
+        'sunsetEpoch: $sunsetEpoch, '
+        'moonphase: $moonphase, '
+        'conditions: $conditions, '
+        'description: $description, '
+        'icon: $icon, '
+        'stations: $stations, '
+        'source: $source, '
+        'hours: $hours)';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Day &&
+          runtimeType == other.runtimeType &&
+          datetime == other.datetime &&
+          datetimeEpoch == other.datetimeEpoch &&
+          tempmax == other.tempmax &&
+          tempmin == other.tempmin &&
+          temp == other.temp &&
+          feelslikemax == other.feelslikemax &&
+          feelslikemin == other.feelslikemin &&
+          feelslike == other.feelslike &&
+          dew == other.dew &&
+          humidity == other.humidity &&
+          precip == other.precip &&
+          precipprob == other.precipprob &&
+          precipcover == other.precipcover &&
+          preciptype == other.preciptype &&
+          snow == other.snow &&
+          snowdepth == other.snowdepth &&
+          windgust == other.windgust &&
+          windspeed == other.windspeed &&
+          winddir == other.winddir &&
+          pressure == other.pressure &&
+          cloudcover == other.cloudcover &&
+          visibility == other.visibility &&
+          solarradiation == other.solarradiation &&
+          solarenergy == other.solarenergy &&
+          uvindex == other.uvindex &&
+          severerisk == other.severerisk &&
+          sunrise == other.sunrise &&
+          sunriseEpoch == other.sunriseEpoch &&
+          sunset == other.sunset &&
+          sunsetEpoch == other.sunsetEpoch &&
+          moonphase == other.moonphase &&
+          conditions == other.conditions &&
+          description == other.description &&
+          icon == other.icon &&
+          stations == other.stations &&
+          source == other.source &&
+          hours == other.hours;
+
+  @override
+  int get hashCode =>
+      datetime.hashCode ^
+      datetimeEpoch.hashCode ^
+      tempmax.hashCode ^
+      tempmin.hashCode ^
+      temp.hashCode ^
+      feelslikemax.hashCode ^
+      feelslikemin.hashCode ^
+      feelslike.hashCode ^
+      dew.hashCode ^
+      humidity.hashCode ^
+      precip.hashCode ^
+      precipprob.hashCode ^
+      precipcover.hashCode ^
+      preciptype.hashCode ^
+      snow.hashCode ^
+      snowdepth.hashCode ^
+      windgust.hashCode ^
+      windspeed.hashCode ^
+      winddir.hashCode ^
+      pressure.hashCode ^
+      cloudcover.hashCode ^
+      visibility.hashCode ^
+      solarradiation.hashCode ^
+      solarenergy.hashCode ^
+      uvindex.hashCode ^
+      severerisk.hashCode ^
+      sunrise.hashCode ^
+      sunriseEpoch.hashCode ^
+      sunset.hashCode ^
+      sunsetEpoch.hashCode ^
+      moonphase.hashCode ^
+      conditions.hashCode ^
+      description.hashCode ^
+      icon.hashCode ^
+      stations.hashCode ^
+      source.hashCode ^
+      hours.hashCode;
 }

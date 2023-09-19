@@ -1,5 +1,20 @@
 class ApiConstants {
   ApiConstants._();
-static const String _baseUrl = "https://weather.visualcrossing.com";
-static const String url = "$_baseUrl/VisualCrossingWebServices/rest/services/timeline/Toshkent?unitGroup=us&key=HX4CGDZRV4UEJURH9Z2ZQ4FUJ&contentType=json";
+
+  static String weatherPath(String city) => "/VisualCrossingWebServices/rest/services/timeline/$city";
+
+  static Map<String, String> weatherParams({
+    required String unitGroup,
+    required String key,
+  }) =>
+      {
+        'unitGroup': unitGroup,
+        'key': key,
+        'contentType': 'json',
+      };
+  static const geoPath = '/ipgeo';
+
+  static Map<String, String> geoParams(String apiKey) => {
+        'apiKey': apiKey,
+      };
 }

@@ -9,7 +9,7 @@ class CurrentConditions {
   final double? precipprob;
   final double? snow;
   final double? snowdepth;
-  final double? preciptype;
+  final List<String> preciptype;
   final double? windgust;
   final double? windspeed;
   final double? winddir;
@@ -75,7 +75,7 @@ class CurrentConditions {
       precipprob: map['precipprob'] != null ? map['precipprob'] as double : null,
       snow: map['snow'] != null ? map['snow'] as double : null,
       snowdepth: map['snowdepth'] != null ? map['snowdepth'] as double : null,
-      preciptype: map['preciptype'] != null ? map['preciptype'] as double : null,
+      preciptype: map['preciptype'] != null ? List.from(map['preciptype'] as List)  : [],
       windgust: map['windgust'] != null ? map['windgust'] as double : null,
       windspeed: map['windspeed'] != null ? map['windspeed'] as double : null,
       winddir: map['winddir'] != null ? map['winddir'] as double : null,
