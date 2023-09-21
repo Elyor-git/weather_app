@@ -4,7 +4,26 @@ import 'package:weather_app/pages/scheduled_page/scheduled_page.dart';
 import 'package:weather_app/styles/app_colors.dart';
 
 class ScheduleOfDay extends StatelessWidget {
-  const ScheduleOfDay({super.key});
+  final double temp;
+  final String icon;
+  final double rainFall;
+  final double windSpeed;
+  final double humidity;
+  final List<int> weekdays;
+  final List<double> weekdaysTemp;
+  final List<String> weekdaysIcon;
+
+  const ScheduleOfDay({
+    super.key,
+    required this.rainFall,
+    required this.icon,
+    required this.temp,
+    required this.windSpeed,
+    required this.humidity,
+    required this.weekdays,
+    required this.weekdaysTemp,
+    required this.weekdaysIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +57,16 @@ class ScheduleOfDay extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ScheduledPage(),
+                  builder: (context) => ScheduledPage(
+                    rainFall: rainFall,
+                    humidity: humidity,
+                    windSpeed: windSpeed,
+                    temp: temp,
+                    icon: icon,
+                    weekdays: weekdays,
+                    weekdaysTemp: weekdaysTemp,
+                    weekdaysIcon: weekdaysIcon,
+                  ),
                 ),
               );
             },

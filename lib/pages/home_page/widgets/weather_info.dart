@@ -1,43 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/pages/controller/main_controller.dart';
 import 'package:weather_app/utils/list_extention.dart';
 
 import '../../../styles/app_colors.dart';
 import '../../../styles/app_icons.dart';
+import '../../controller/main_controller.dart';
 
-class WeatherInfo extends StatefulWidget {
-  const WeatherInfo({super.key});
+class WeatherInfo extends StatelessWidget {
+  final double rainFallSpeed;
+  final double windSpeed;
+  final double humidity;
 
-  @override
-  State<WeatherInfo> createState() => _WeatherInfoState();
-}
+  const WeatherInfo({
+    super.key,
+    required this.rainFallSpeed,
+    required this.humidity,
+    required this.windSpeed,
+  });
 
-class _WeatherInfoState extends State<WeatherInfo> {
-  late final MainController mainController;
-
-  _WeatherInfoState() {
-    mainController = MainController(setState)..getApi();
-  }
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
-        children:  <Widget>[
+        children: <Widget>[
           DetailItem(
             icon: AppIcons.umbrellaIcon,
             info: "RainFall",
-            action: "${mainController.rainInfo ?? 0}cm",
+            action:
+                "${rainFall(rainFallSpeed)}cm",
           ),
-           DetailItem(
+          DetailItem(
             icon: AppIcons.windIcon,
             info: "Wind",
-            action: "${mainController.windSpeed ?? 0}km/h",
+            action:
+                "${windSpeed.round()}km/h",
           ),
-           DetailItem(
+          DetailItem(
             icon: AppIcons.humidityIcon,
             info: "Humidity",
-            action: "${mainController.humidity ?? 0}%",
+            action:
+                "${humidity.truncate()}%",
           ),
         ].addBetween(
           const SizedBox(height: 5),

@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/styles/app_colors.dart';
-import 'package:weather_app/styles/app_icons.dart';
 
+
+import '../../../styles/app_colors.dart';
+import '../../../styles/app_icons.dart';
 import '../../controller/main_controller.dart';
 
-class TomorrowWeatherInfo extends StatefulWidget {
-  const TomorrowWeatherInfo({super.key});
+class TomorrowWeatherInfo extends StatelessWidget {
+  final double temp;
+  final String icon;
+  final double rainFallS;
+  final double windSpeed;
+  final double humidity;
 
-  @override
-  State<TomorrowWeatherInfo> createState() => _TomorrowWeatherInfoState();
-}
-
-class _TomorrowWeatherInfoState extends State<TomorrowWeatherInfo> {
-  late final MainController mainController;
-
-  _TomorrowWeatherInfoState() {
-    mainController = MainController(setState)..getApi();
-  }
+  const TomorrowWeatherInfo({
+    super.key,
+    required this.rainFallS,
+    required this.icon,
+    required this.temp,
+    required this.windSpeed,
+    required this.humidity,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class _TomorrowWeatherInfoState extends State<TomorrowWeatherInfo> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   const Text(
+                  const Text(
                     "Tomorrow",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -49,7 +52,7 @@ class _TomorrowWeatherInfoState extends State<TomorrowWeatherInfo> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "${mainController.tomorrowCelsius}°",
+                        "${fahrenheitToCelsius(temp)}°",
                         style: const TextStyle(
                             color: AppColors.scheduledNext7Days,
                             fontSize: 15,
@@ -58,8 +61,7 @@ class _TomorrowWeatherInfoState extends State<TomorrowWeatherInfo> {
                       const SizedBox(width: 10),
                       Image(
                         image: AssetImage(
-                          mainController.tomorrowWeatherIcon ??
-                              AppIcons.cloudyRainSunIcon,
+                          weatherInIcon(icon),
                         ),
                         height: 80,
                         width: 80,
@@ -74,11 +76,13 @@ class _TomorrowWeatherInfoState extends State<TomorrowWeatherInfo> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     WeatherInfo(
-                      text: "${mainController.tomorrowRainFall} cm",
+                      text:
+                          "${rainFall(rainFallS)} cm",
                       weatherInfo: AppIcons.umbrellaIcon,
                     ),
                     WeatherInfo(
-                      text: "${mainController.tomorrowWindSpeed}km/h",
+                      text:
+                          "${windSpeed.round()}km/h",
                       weatherInfo: AppIcons.windIcon,
                     ),
                     Column(
@@ -115,7 +119,7 @@ class _TomorrowWeatherInfoState extends State<TomorrowWeatherInfo> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            "${mainController.tomorrowHumidity} %",
+                            "${humidity.toStringAsFixed(0)} %",
                             style: const TextStyle(
                               color: AppColors.scheduledNext7Days,
                               fontSize: 12,

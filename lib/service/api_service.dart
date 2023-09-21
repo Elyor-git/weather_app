@@ -1,29 +1,78 @@
 import 'package:dio/dio.dart';
-import 'package:weather_app/constants/config.dart';
+
+import '../utils/custom_exeptions.dart';
+
+enum Method {
+  get,
+  put,
+  patch,
+  post,
+  delete,
+}
 
 class ApiService {
-  static final ApiService _instance = ApiService._();
+  static ApiService _instance(Dio dio) => ApiService._(dio);
 
-  factory ApiService() => _instance;
+  factory ApiService(Dio dio) => _instance(dio);
 
-  late final Dio geoDio;
-  late final Dio dio;
+  ApiService._(this.dio);
 
-  ApiService._() {
-    final options = BaseOptions(
-      baseUrl: AppConfig.weatherBaseUrl,
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
-      responseType: ResponseType.json,
-    );
-    dio = Dio(options);
+  final Dio dio;
 
-    final geoOptions = BaseOptions(
-      baseUrl: AppConfig.weatherBaseUrl,
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
-      responseType: ResponseType.json,
-    );
-    geoDio = Dio(geoOptions);
+  Future<String> request(
+    String path, {
+    Method method = Method.get,
+    Map<String, String>? headers,
+    Map<String, String>? queryParameters,
+    Object? body,
+  }) async {
+    if (headers != null) dio.options.headers.addAll(headers);
+
+    try {
+      Response<String> response = await switch (method) {
+        Method.get =>
+          dio.get<String>(path, queryParameters: queryParameters, data: body),
+        Method.post =>
+          dio.post<String>(path, queryParameters: queryParameters, data: body),
+        Method.put =>
+          dio.put<String>(path, queryParameters: queryParameters, data: body),
+        Method.patch =>
+          dio.patch<String>(path, queryParameters: queryParameters, data: body),
+        Method.delete => dio.delete<String>(path,
+            queryParameters: queryParameters, data: body),
+      };
+
+      return switch (response.statusCode) {
+        null => Error.throwWithStackTrace(
+            UnknownException("${response.data}", -1),
+            StackTrace.current,
+          ),
+        >= 100 && < 200 => Error.throwWithStackTrace(
+            UnknownException(response.statusMessage!, response.statusCode!),
+            StackTrace.current,
+          ),
+        >= 200 && < 300 => response.data ?? "",
+        >= 300 && < 400 => Error.throwWithStackTrace(
+            UnknownException(response.statusMessage!, response.statusCode!),
+            StackTrace.current,
+          ),
+        >= 400 && < 500 => Error.throwWithStackTrace(
+            ClientException(response.statusMessage!, response.statusCode!),
+            StackTrace.current,
+          ),
+        >= 500 && < 600 => Error.throwWithStackTrace(
+            ServerException(response.statusMessage!, response.statusCode!),
+            StackTrace.current,
+          ),
+        _ => Error.throwWithStackTrace(
+            UnknownException(response.statusMessage!, response.statusCode!),
+            StackTrace.current,
+          ),
+      };
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      rethrow;
+    }
   }
 }
