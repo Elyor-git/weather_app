@@ -53,8 +53,7 @@ class DailyWeather extends StatelessWidget {
                     ),
                     Image(
                       image: AssetImage(
-                        weatherInIcon(weekdaysIcon[item + 2] ??
-                            ""),
+                        weatherInIcon(weekdaysIcon[item + 2]),
                       ),
                       height: 45,
                       width: 45,

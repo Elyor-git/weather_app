@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:weather_app/constants/api_constants.dart';
+
+import '../../constants/api_constants.dart';
 import '../../constants/config.dart';
 import '../../model/weather_model/weather_model.dart';
 import '../../service/wrapper/i_servive_wrapper.dart';

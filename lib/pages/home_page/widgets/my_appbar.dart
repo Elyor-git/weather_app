@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/styles/app_colors.dart';
-import 'package:weather_app/styles/app_icons.dart';
+
+import '../../../styles/app_colors.dart';
+import '../../../styles/app_icons.dart';
+
 
 class MyAppBar extends StatelessWidget {
   const MyAppBar({super.key});
