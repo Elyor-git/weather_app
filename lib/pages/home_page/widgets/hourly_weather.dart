@@ -58,7 +58,7 @@ class HourlyWeather extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => const SizedBox(width: 10),
-              itemCount: hoursOfWeekdays.length,
+              itemCount: hoursOfWeekdays.length +1 ,
               separatorBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: SizedBox(
