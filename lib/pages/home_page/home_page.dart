@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/styles/app_icons.dart';
 import '../../styles/app_colors.dart';
 import '../controller/main_controller.dart';
 import '../data/geo_repository.dart';

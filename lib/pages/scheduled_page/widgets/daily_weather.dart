@@ -41,7 +41,7 @@ class DailyWeather extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "${fahrenheitToCelsius(weekdaysTemp[item + 2] ?? 0)}°",
+                      "${fahrenheitToCelsius(weekdaysTemp[item + 2])}°",
                       style: const TextStyle(
                         color: AppColors.scheduledNext7Days,
                         fontWeight: FontWeight.w600,
